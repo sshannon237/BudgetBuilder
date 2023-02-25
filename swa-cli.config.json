@@ -2,8 +2,8 @@
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
     "budget-builder": {
-      "appLocation": "BudgetBuilder/client",
-      "outputLocation": "BudgetBuilder/client/build",
+      "appLocation": "client",
+      "outputLocation": "client/build",
       "appBuildCommand": "npm run build",
       "run": "npm start",
       "appDevserverUrl": "http://localhost:3000"
