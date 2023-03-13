@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import logo from "../logo.svg";
-import User from "../types/User";
 
 function PrivateHome({ user }: any) {
   const [name, setName] = React.useState("");

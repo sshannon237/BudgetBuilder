@@ -1,5 +1,3 @@
-import User from "../types/User";
-
 const NavBar = ({ user }: any) => {
   const providers = ["twitter", "github", "aad"];
   const redirect = `/`;
