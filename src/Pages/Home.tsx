@@ -1,9 +1,11 @@
+import BasePage from "./BasePage"
+
 function Home() {
 
   return (
-    <>
-				HOME
-    </>
+    <BasePage>
+			HOME
+    </BasePage>
   )
 }
 
