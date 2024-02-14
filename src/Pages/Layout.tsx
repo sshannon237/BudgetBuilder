@@ -1,10 +1,11 @@
-import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material"
+import { AppBar, Avatar, Box, Button, Container, IconButton, LinearProgress, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material"
 import { Link, Outlet } from "react-router-dom"
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
-const pages = ['Customization'];
+const pages = ['Purchases', 'Customization'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Layout() {
@@ -26,6 +27,10 @@ function Layout() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  // TODO: Make these nicer
+  const Loading = <LinearProgress color="inherit" />
+  const Error = <Typography color="inherit">Error!</Typography>
 
   return (
     <>
@@ -157,8 +162,11 @@ function Layout() {
           </Toolbar>
         </Container>
       </AppBar>
-      
-      <Outlet />
+      <ErrorBoundary fallback={Error}>
+        <Suspense fallback={Loading}>
+          <Outlet />
+        </Suspense>
+      </ErrorBoundary>
     </>
   )
 }

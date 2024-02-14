@@ -14,7 +14,7 @@
       "request-body-strict": true
     },
     "graphql": {
-      "enabled": true,
+      "enabled": false,
       "path": "/graphql",
       "allow-introspection": true
     },

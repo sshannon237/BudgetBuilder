@@ -1,5 +1,5 @@
 interface Category {
-	CategoryID?: number,
+	CategoryID: number,
 	UserID: number,
 	Name: string
 }

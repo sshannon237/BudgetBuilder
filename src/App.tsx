@@ -3,10 +3,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Layout from './Pages/Layout.tsx';
-import Error from './Pages/Error.tsx';
-import Home from './Pages/Home.tsx';
-import Customization from './Pages/Customization.tsx';
+import Layout from './pages/Layout.tsx';
+import Error from './pages/Error.tsx';
+import Home from './pages/Home.tsx';
+import Customization from './pages/Customization.tsx';
+import Purchases from './pages/Purchases.tsx';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 
 function App() {
@@ -24,12 +27,18 @@ function App() {
           path: "/customization",
           element: <Customization/>,
         },
+        {
+          path: "/purchases",
+          element: <Purchases/>,
+        },
       ],
     },
   ]);
 
   return (
-    <RouterProvider router={router} />
+    <LocalizationProvider dateAdapter={AdapterMoment}>
+      <RouterProvider router={router} />
+    </LocalizationProvider>
   )
 }
 

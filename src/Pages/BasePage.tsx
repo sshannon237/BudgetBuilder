@@ -6,13 +6,15 @@ import {
 function BasePage(props: PropsWithChildren) {
 
   return (
-    <Grid container>
-			<Grid xs={0} md={3}/>
-			<Grid container xs={12} md={6}>
-				{props.children}
+		<>
+			<Grid container>
+				<Grid xs={0} md={2}/>
+				<Grid container xs={12} md={8}>
+					{props.children}
+				</Grid>
+				<Grid xs={0} md={2}/>
 			</Grid>
-			<Grid xs={0} md={3}/>
-    </Grid>
+		</>
   )
 }
 

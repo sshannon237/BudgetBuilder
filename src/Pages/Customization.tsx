@@ -1,83 +1,97 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import BasePage from "./BasePage"
-import Category from "../Types/Category"
-import Grid from "@mui/material/Unstable_Grid2"
-import { Button, TextField, Typography } from "@mui/material"
+import Category from "../types/Category"
+import Grid from "@mui/material/Grid"
+import EditIcon from '@mui/icons-material/Edit';
+import { Button, IconButton, Stack, TextField, Typography } from "@mui/material"
+import useSWR from "swr";
+import { 
+	getCategories,
+	addCategory,
+	// updateCategory,
+	deleteCategory,
+	categoriesUrlEndpoint
+} from "../api/categoriesApi";
 
 function Customization() {
-	const [categories, setCategories] = useState<Category[]>([]);
 	const [newCategory, setNewCategory] = useState("");
-	
-	useEffect(() => {
-		const getCategories = async () => {
-			try {
-				const res = await fetch("/data-api/rest/Category");
-				if (!res.ok) {
-					throw new Error(res.statusText);
-				} 
-				const result = await res.json();
 
-				console.log(result.value)
+	const {
+		data: categories,
+		mutate
+	} = useSWR(categoriesUrlEndpoint, getCategories, {
+		suspense: true
+	});
 
-				setCategories(result.value);
-			} catch (e) {
-				console.error(e);
-			}
-		};
-
-		getCategories();
-	}, []);
-
-	const postCategory = async () => {
+	const addCategoryMutate = async (newCategory: Category) => {
 		try {
-			const data: Category = {
-				UserID: 1,
-				Name: newCategory
-			}
+			await addCategory(newCategory);
+			mutate();
+		} catch(e) {
+			console.error(e);
+		}
+	}
 
-			const res = await fetch("/data-api/rest/Category", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(data)
-			});
+	// const updateCategoryMutate = async (updatedCategory: Category) => {
+	// 	try {
+	// 		await updateCategory(updatedCategory);
+	// 		mutate();
+	// 	} catch(e) {
+	// 		console.error(e);
+	// 	}
+	// } 
 
-			if (!res.ok) {
-				throw new Error(res.statusText);
-			}
-			setNewCategory("");
-
-			const result = await res.json();
-			setCategories([...categories, ...result.value]);
+	const deleteCategoryMutate = async ({CategoryID}: Category) => {
+		try {
+			await deleteCategory(CategoryID);
+			mutate();
 		} catch (e) {
 			console.error(e);
 		}
-	};
+	}
+
+	const handleAddCategory = () => {
+		addCategoryMutate({ 
+			CategoryID: -1,
+			UserID: 1,
+			Name: newCategory.toUpperCase()
+		});
+
+		setNewCategory("");
+	}
 
   return (
     <BasePage>
-			<Grid container spacing={2}>
-				<Grid xs={12}>
-					<Typography variant="h6">
-						Customize Categories
-					</Typography>
-				</Grid>
+			<Stack spacing={2}>
+				<Typography variant="h6">
+					Customize Categories
+				</Typography>
 
-				<Grid container xs={12}>
+				<Grid container>
 					<Grid>
 						<TextField variant="standard" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} />
 					</Grid>
-
 					<Grid>
-						<Button variant="text" onClick={postCategory}>Add</Button>
+						<Button variant="text" onClick={handleAddCategory}>Add</Button>
 					</Grid>
 				</Grid>
-				
-				<Grid xs={12}>
-					{categories.map(c => {
-						return <Typography key={c.CategoryID} variant="body1">{c.Name}</Typography>
+
+				<Stack>
+					{categories?.map(c => {
+						return(
+							<Grid container key={c.CategoryID}>
+								<Grid>
+									<Typography variant="body1">{c.Name}</Typography>
+								</Grid>
+								
+								<IconButton aria-label="delete" size="small" onClick={() => deleteCategoryMutate(c)}>
+									<EditIcon fontSize="small"/>
+								</IconButton>
+							</Grid>
+						)
 					})}
-				</Grid>
-			</Grid>
+				</Stack>
+			</Stack>
     </BasePage>
   )
 }
