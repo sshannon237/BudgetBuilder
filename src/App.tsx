@@ -8,8 +8,6 @@ import Error from './pages/Error.tsx';
 import Home from './pages/Home.tsx';
 import Customization from './pages/Customization.tsx';
 import Purchases from './pages/Purchases.tsx';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 
 function App() {
@@ -36,9 +34,7 @@ function App() {
   ]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
-      <RouterProvider router={router} />
-    </LocalizationProvider>
+    <RouterProvider router={router} />
   )
 }
 

@@ -2,7 +2,7 @@ function Error() {
 
   return (
     <>
-				ERROR 404
+				ERROR 404!
     </>
   )
 }

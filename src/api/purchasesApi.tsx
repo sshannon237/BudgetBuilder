@@ -1,11 +1,11 @@
 import axios from "axios"
 import Purchase from "../types/Purchase";
 
-// const delay = (milliseconds:number) => {
-// 	return new Promise(resolve => {
-// 			setTimeout(resolve, milliseconds);
-// 	});
-// }
+const delay = (milliseconds:number) => {
+	return new Promise(resolve => {
+			setTimeout(resolve, milliseconds);
+	});
+}
 
 const api = axios.create({
 	baseURL: "/data-api/rest"
@@ -14,8 +14,8 @@ const api = axios.create({
 export const purchaseUrlEndpoint = "/Purchase";
 
 export const getPurchases = async (): Promise<Purchase[]> => {
-	// await delay(2000);
-	const res = await api.get(purchaseUrlEndpoint);
+	await delay(2000);
+	const res = await api.get(`${purchaseUrlEndpoint}`);
 	return res.data.value;
 }
 
@@ -25,7 +25,7 @@ export const addPurchase = async ({CategoryID, PurchaseDate, Notes}:Purchase): P
 	return res.data.value;
 }
 
-export const updatePurchase = async (category: Purchase) => {
+export const updatePurchase = async (category: Purchase) => { 
 	const res = await api.patch(`${purchaseUrlEndpoint}/PurchaseID/${category.PurchaseID}`, category);
 	return res.data.value;
 }
