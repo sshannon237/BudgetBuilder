@@ -29,7 +29,7 @@ export const updateCategory = async (category: Category) => {
 	return res.data.value;
 }
 
-export const deleteCategory = async (CategoryID: number): Promise<void> => {
+export const deleteCategory = async (CategoryID: number): Promise<void> => {	
 	const res = await api.delete(`${categoriesUrlEndpoint}/CategoryID/${CategoryID}`);
 	return res.data.value;
 }

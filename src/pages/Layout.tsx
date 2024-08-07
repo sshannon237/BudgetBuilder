@@ -1,14 +1,18 @@
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import Error from "./Error";
 
 const pages = ['Purchases', 'Customization'];
 
 function Layout() {
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // TODO: Make these nicer
   const Loading = <h1>Loading...</h1>
-  const Error = <h1>Error!</h1>
+  
 
   return (
     <>
@@ -31,11 +35,15 @@ function Layout() {
         ))}
       </ul>
 
-      <ErrorBoundary fallback={Error}>
+      <ErrorBoundary 
+        FallbackComponent={Error}
+        onReset={()=>navigate(location.pathname)}
+        resetKeys={[location.pathname]}
+        >
         <Suspense fallback={Loading}>
           <Outlet />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary>  
     </>
   )
 }

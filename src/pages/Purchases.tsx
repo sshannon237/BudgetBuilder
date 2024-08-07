@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import BasePage from "./BasePage"
-import { addPurchase, getPurchases, purchaseUrlEndpoint } from "../api/purchasesApi";
+import { addPurchase, deletePurchase, getPurchases, purchaseUrlEndpoint } from "../api/purchasesApi";
 import { useState } from "react";
 import { categoriesUrlEndpoint, getCategories } from "../api/categoriesApi";
 import Purchase from "../types/Purchase";
@@ -9,9 +9,10 @@ import moment from "moment";
 function Purchases() {
 
 	const [newDate, setNewDate] = useState("");
+	const [newAmount, setNewAmount] = useState("");
 	const [newCategory, setNewCategory] = useState("");
 	const [newNotes, setNewNotes] = useState("");
-  const [month, setMonth] = useState("2024-08");  
+  const [month, setMonth] = useState("");  
 
 	const {
 		data: purchases,
@@ -36,10 +37,12 @@ function Purchases() {
 	}
 
 	const handleAddPurchase = () => {
+		console.log(newCategory)
 		addPurchaseMutate({
 			PurchaseID: -1,
-			CategoryID: parseInt(newCategory), //TODO: remove ?? -1
-			PurchaseDate: moment(newDate), //TODO: remove ?? moment()
+			PurchaseAmount: parseInt(newAmount), 
+			CategoryID: parseInt(newCategory),
+			PurchaseDate: moment(newDate),
 			Notes: newNotes.toUpperCase()
 		});
 
@@ -47,16 +50,32 @@ function Purchases() {
 		setNewCategory("");
 		setNewNotes("");
 	}
+
+	const deletePurchaseMutate = async ({PurchaseID}: Purchase) => {
+		try {
+			await deletePurchase(PurchaseID);
+			mutate();
+		} catch (e) {
+			console.error(e);
+		}
+	}
 	
   return (
     <BasePage>
       <h2>Purchases</h2>
 
       <input type="month" value={month} onChange={e => setMonth(e.target.value)}/>
+			<input type="button" value="All Purchases" onClick={() => setMonth("")}/>
 
       <div>
         <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)}/>
-        <select onChange={e => setNewCategory(e.target.value)}>
+				<input type="number" value={newAmount} onChange={e => setNewAmount(e.target.value)}/>
+        <select onChange={e => {
+					console.log(e.target.value)
+					setNewCategory(e.target.value)
+				}
+				}>
+					<option />
           {categories.map((category) => (
             <option key={category.CategoryID} value={category.CategoryID}>{category.Name}</option>
           ))} 
@@ -69,16 +88,27 @@ function Purchases() {
         <tbody>
           <tr>
             <th>Date</th>
+						<th>Amount</th>
             <th>Category</th>
             <th>Notes</th>
+						<th/>
           </tr>
-          {purchases.map((purchase) => (
-                <tr key={purchase.PurchaseID}>
-                  <td>{moment(purchase.PurchaseDate).format("DD/MM/YY")}</td>
-                  <td>{purchase.CategoryID}</td>
-                  <td>{purchase.Notes}</td>
-                </tr>
-              ))}
+          {purchases.map((purchase) => {
+						console.log(month)
+							if (month.length == 0 || moment(purchase.PurchaseDate).isSame(moment(month), "month")) {
+								return (
+									<tr key={purchase.PurchaseID}>
+										<td>{moment(purchase.PurchaseDate).format("DD/MM/YY")}</td>
+										<td>{purchase.PurchaseAmount}</td>
+										<td>{purchase.CategoryID}</td>
+										<td>{purchase.Notes}</td>
+										<td>
+											<input type="button" value="Delete" onClick={() => deletePurchaseMutate(purchase)}/>
+										</td>
+									</tr>
+								)
+							}
+						})}
         </tbody>
       </table>
     </BasePage>

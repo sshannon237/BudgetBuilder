@@ -1,9 +1,9 @@
-function Error() {
-
+const Error = ({error, resetErrorBoundary}) => {
   return (
-    <>
-				ERROR 404!
-    </>
+    <div>
+      <p>{error.message}</p>
+      <input type="button" onClick={resetErrorBoundary} value="Try Again" />
+    </div>
   )
 }
 
