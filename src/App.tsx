@@ -4,7 +4,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Layout from './pages/Layout.tsx';
-import Error from './pages/Error.tsx';
+// import Error from './pages/Error.tsx';
 import Home from './pages/Home.tsx';
 import Customization from './pages/Customization.tsx';
 import Purchases from './pages/Purchases.tsx';
@@ -15,7 +15,7 @@ function App() {
   const router = createBrowserRouter([
     {
       element: <Layout />,
-      errorElement: <Error/>,
+      // errorElement: <Error/>,
       children: [
         {
           path: "/",
