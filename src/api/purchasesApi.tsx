@@ -22,7 +22,7 @@ export const getPurchases = async (): Promise<Purchase[]> => {
 // TODO: Destructuring pattern can be cleaned
 export const addPurchase = async ({CategoryID, PurchaseAmount, PurchaseDate, Notes}:Purchase): Promise<Purchase> => {
 	
-	console.log({CategoryID, PurchaseAmount, PurchaseDate, Notes});
+	console.log(PurchaseAmount);
 	const res = await api.post(purchaseUrlEndpoint, {CategoryID, PurchaseAmount, PurchaseDate, Notes});
 	return res.data.value;
 }
