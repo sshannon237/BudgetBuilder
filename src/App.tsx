@@ -30,7 +30,7 @@ function App() {
           element: <Purchases/>,
         },
       ],
-    },
+    }
   ]);
 
   return (

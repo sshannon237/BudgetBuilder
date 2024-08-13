@@ -13,17 +13,27 @@ const api = axios.create({
 
 export const purchaseUrlEndpoint = "/Purchase";
 
+const getUserInfo = async () => {
+	try {
+		const response = await fetch('/.auth/me');
+		const payload = await response.json();
+		const { clientPrincipal } = payload;
+		return clientPrincipal;
+	} catch ( error ) {
+		console.error(error);
+	}
+}
+
+// TODO: Fetching userInfo twice? user SWR or similar instead?
 export const getPurchases = async (): Promise<Purchase[]> => {
-	// await delay(2000);
-	const res = await api.get(purchaseUrlEndpoint);
+	const userInfo = await getUserInfo();
+	const res = await api.get(`${purchaseUrlEndpoint}?$filter=UserID eq '${userInfo.userId}'`);
 	return res.data.value;
 }
 
 // TODO: Destructuring pattern can be cleaned
-export const addPurchase = async ({CategoryID, PurchaseAmount, PurchaseDate, Notes}:Purchase): Promise<Purchase> => {
-	
-	console.log(PurchaseAmount);
-	const res = await api.post(purchaseUrlEndpoint, {CategoryID, PurchaseAmount, PurchaseDate, Notes});
+export const addPurchase = async ({UserID, CategoryID, PurchaseAmount, PurchaseDate, Notes}:Purchase): Promise<Purchase> => {
+	const res = await api.post(purchaseUrlEndpoint, {UserID, CategoryID, PurchaseAmount, PurchaseDate, Notes});
 	return res.data.value;
 }
 

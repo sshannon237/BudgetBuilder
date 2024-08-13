@@ -1,18 +1,40 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
-import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Error from "./Error";
+import { Suspense, useEffect, useState } from "react";
+import UserInfo from "../types/UserInfo";
 
 const pages = ['Purchases', 'Customization'];
 
+type ContextType = { userInfo: UserInfo | null}
+
 function Layout() {
+
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    ( async () => {
+      setUserInfo(await getUserInfo());
+    })();
+  }, []);
+
+  //TODO move to api folder?
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch('/.auth/me');
+      const payload = await response.json();
+      const { clientPrincipal } = payload;
+      return clientPrincipal;
+    } catch ( error ) {
+      console.error(error);
+    }
+  }
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // TODO: Make these nicer
   const Loading = <h1>Loading...</h1>
-  
 
   return (
     <>
@@ -41,7 +63,7 @@ function Layout() {
         resetKeys={[location.pathname]}
         >
         <Suspense fallback={Loading}>
-          <Outlet />
+          <Outlet context={{ userInfo } satisfies ContextType} />
         </Suspense>
       </ErrorBoundary>  
     </>

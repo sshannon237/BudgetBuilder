@@ -5,8 +5,11 @@ import { useState } from "react";
 import { categoriesUrlEndpoint, getCategories } from "../api/categoriesApi";
 import Purchase from "../types/Purchase";
 import moment from "moment";
+import useUserInfo from "../customHooks/useUserInfo";
 
 function Purchases() {
+
+	const { userInfo } = useUserInfo();
 
 	const [newDate, setNewDate] = useState("");
 	const [newAmount, setNewAmount] = useState("0");
@@ -38,6 +41,7 @@ function Purchases() {
 
 	const handleAddPurchase = () => {
 		addPurchaseMutate({
+			UserID: userInfo?.userId ?? "", //TODO: messy
 			PurchaseID: -1,
 			PurchaseAmount: parseFloat(newAmount), 
 			CategoryID: parseInt(newCategory),
