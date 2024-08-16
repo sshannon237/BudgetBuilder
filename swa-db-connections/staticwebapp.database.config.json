@@ -47,23 +47,6 @@
         }      
       }
     },
-    "User": {
-      "source": "dbo.User",
-      "permissions": [
-        {
-          "role": "anonymous",
-          "actions": [
-            "*"
-          ]
-        }
-      ],
-      "relationships": {
-        "categories": {
-          "cardinality": "many",
-          "target.entity": "Category"
-        }      
-      }
-    },
     "Category": {
       "source": "dbo.Category",
       "permissions": [
@@ -75,10 +58,6 @@
         }
       ],
       "relationships": {
-        "user": {
-          "cardinality": "one",
-          "target.entity": "User"
-        },
         "purchases": {
           "cardinality": "many",
           "target.entity": "Purchase"

@@ -1,28 +1,11 @@
 import axios from "axios"
 import Purchase from "../types/Purchase";
-
-// const delay = (milliseconds:number) => {
-// 	return new Promise(resolve => {
-// 			setTimeout(resolve, milliseconds);
-// 	});
-// }
-
+import { getUserInfo } from "./userInfoApi";
 const api = axios.create({
 	baseURL: "/data-api/rest"
 });
 
 export const purchaseUrlEndpoint = "/Purchase";
-
-const getUserInfo = async () => {
-	try {
-		const response = await fetch('/.auth/me');
-		const payload = await response.json();
-		const { clientPrincipal } = payload;
-		return clientPrincipal;
-	} catch ( error ) {
-		console.error(error);
-	}
-}
 
 // TODO: Fetching userInfo twice? user SWR or similar instead?
 export const getPurchases = async (): Promise<Purchase[]> => {

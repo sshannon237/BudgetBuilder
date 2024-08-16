@@ -9,9 +9,13 @@ import {
 	deleteCategory,
 	categoriesUrlEndpoint
 } from "../api/categoriesApi";
+import useUserInfo from "../customHooks/useUserInfo";
 
 function Customization() {
+	
 	const [newCategory, setNewCategory] = useState("");
+
+	const { userInfo } = useUserInfo();
 
 	const {
 		data: categories,
@@ -50,7 +54,7 @@ function Customization() {
 	const handleAddCategory = () => {
 		addCategoryMutate({ 
 			CategoryID: -1,
-			UserID: 1,
+			UserID: userInfo?.userId ?? "", //TODO
 			Name: newCategory.toUpperCase()
 		});
 

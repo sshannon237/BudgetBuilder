@@ -1,12 +1,6 @@
 import axios from "axios"
 import Category from "../types/Category";
-
-// const delay = (milliseconds:number) => {
-// 	return new Promise(resolve => {
-// 			setTimeout(resolve, milliseconds);
-// 	});
-// }
-
+import { getUserInfo } from "./userInfoApi";
 const api = axios.create({
 	baseURL: "/data-api/rest"
 });
@@ -15,7 +9,8 @@ export const categoriesUrlEndpoint = "/Category";
 
 export const getCategories = async (): Promise<Category[]> => {
 	// await delay(2000);
-	const res = await api.get(categoriesUrlEndpoint);
+	const userInfo = await getUserInfo();
+	const res = await api.get(`${categoriesUrlEndpoint}?$filter=UserID eq '${userInfo.userId}'`);
 	return res.data.value;
 }
 
